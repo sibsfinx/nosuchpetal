@@ -1,0 +1,28 @@
+{
+  "name": "nosuchpetals",
+  "version": "1.0.0",
+  "description": "Generative flower art with React Three Fiber",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@react-three/drei": "^9.88.13",
+    "@react-three/fiber": "^8.15.11",
+    "@react-three/postprocessing": "^2.15.11",
+    "leva": "^0.9.35",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "three": "^0.168.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@types/three": "^0.157.0",
+    "@vitejs/plugin-react": "^4.1.1",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0"
+  }
+}
