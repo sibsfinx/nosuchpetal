@@ -49,3 +49,111 @@ body {
   line-height: 1.4;
   opacity: 0.8;
 }
+
+.save-button {
+  background: linear-gradient(135deg, #ff3366, #ff6699);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 12px;
+  padding: 10px 16px;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.save-button:hover {
+  background: linear-gradient(135deg, #ff6699, #ff99cc);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 51, 102, 0.3);
+}
+
+.save-button:active {
+  transform: translateY(0);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .ui-overlay {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+  }
+  
+  .info-panel {
+    max-width: none;
+    padding: 12px;
+    font-size: 13px;
+  }
+  
+  .save-button {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+}
+
+.save-button {
+  background: linear-gradient(135deg, #ff3366, #ff6699);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 12px;
+  padding: 10px 16px;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.save-button:hover {
+  background: linear-gradient(135deg, #ff1144, #ff4477);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 51, 102, 0.3);
+}
+
+.save-button:active {
+  transform: translateY(0);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .ui-overlay {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+  }
+  
+  .info-panel {
+    max-width: none;
+    font-size: 12px;
+    padding: 12px;
+  }
+  
+  .info-panel h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  
+  .info-panel p {
+    margin: 6px 0;
+  }
+  
+  .save-button {
+    font-size: 12px;
+    padding: 8px 12px;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ui-overlay {
+    position: fixed;
+    bottom: 20px;
+    top: auto;
+    left: 20px;
+    right: 20px;
+  }
+}

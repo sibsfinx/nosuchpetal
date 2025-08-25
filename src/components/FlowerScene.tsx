@@ -3,6 +3,7 @@ import { Environment, OrbitControls } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette, ChromaticAberration } from '@react-three/postprocessing'
 import { BlendFunction } from 'postprocessing'
 import { Petal } from './Petal'
+import { SaveImageHandler } from './SaveImageHandler'
 import { useControls } from 'leva'
 import { useFrame } from '@react-three/fiber'
 import { Group } from 'three'
@@ -89,10 +90,17 @@ export function FlowerScene() {
         enablePan={false}
         enableZoom={true}
         enableRotate={true}
-        minDistance={3}
-        maxDistance={15}
+        minDistance={4}
+        maxDistance={20}
         maxPolarAngle={Math.PI / 1.5}
+        zoomSpeed={0.8}
+        rotateSpeed={0.8}
+        enableDamping={true}
+        dampingFactor={0.05}
       />
+
+      {/* Save Image Handler */}
+      <SaveImageHandler />
 
       {/* Post-processing effects */}
       <EffectComposer>

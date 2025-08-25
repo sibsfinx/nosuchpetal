@@ -7,6 +7,7 @@ export function UI() {
         <p>• Drag to rotate the view</p>
         <p>• Scroll to zoom in/out</p>
         <p>• Auto rotation enabled by default</p>
+        <p>• Press 'S' to save current frame</p>
         <p>• Use the controls panel to customize</p>
       </div>
     </div>
