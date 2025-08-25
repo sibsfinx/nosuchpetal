@@ -1,6 +1,7 @@
 import { useRef, useMemo } from 'react'
 import { useFrame, extend } from '@react-three/fiber'
 import { ShaderMaterial, Color } from 'three'
+import { FLOWER_TYPES, FlowerType } from '../types/flowers'
 
 // Vertex shader for petal warping
 const vertexShader = `
@@ -86,17 +87,36 @@ class PetalShaderMaterial extends ShaderMaterial {
 
 extend({ PetalShaderMaterial })
 
-interface PetalMaterialProps {
-  index: number
+// TypeScript declaration for the custom material
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      petalShaderMaterial: any
+    }
+  }
 }
 
-export function PetalMaterial({ index }: PetalMaterialProps) {
+interface PetalMaterialProps {
+  index: number
+  flowerType?: FlowerType
+}
+
+export function PetalMaterial({ index, flowerType = 'default' }: PetalMaterialProps) {
   const materialRef = useRef<PetalShaderMaterial>(null!)
+  const flowerConfig = FLOWER_TYPES[flowerType]
   
   const colorVariations = useMemo(() => {
-    const hue = (index * 137.508) % 360 // Golden angle for natural distribution
-    return new Color().setHSL(hue / 360, 0.8, 0.6)
-  }, [index])
+    // Use flower-specific colors instead of rainbow distribution
+    const colorIndex = index % flowerConfig.colors.length
+    const baseColor = flowerConfig.colors[colorIndex]
+    const color = new Color(baseColor)
+    
+    // Add slight variation for organic look
+    const variation = (index * 0.1) % 0.2 - 0.1
+    color.offsetHSL(0, 0, variation)
+    
+    return color
+  }, [index, flowerConfig.colors])
   
   useFrame(({ clock }) => {
     if (materialRef.current) {

@@ -7,11 +7,13 @@ import { SaveImageHandler } from './SaveImageHandler'
 import { useControls } from 'leva'
 import { useFrame } from '@react-three/fiber'
 import { Group } from 'three'
+import { FLOWER_TYPES, FlowerType } from '../types/flowers'
 
 export function FlowerScene() {
   const groupRef = useRef<Group>(null!)
   
   const {
+    flowerType,
     petalCount,
     radius,
     autoRotate,
@@ -21,6 +23,15 @@ export function FlowerScene() {
     vignetteIntensity,
     chromaticAberrationOffset
   } = useControls({
+    flowerType: {
+      value: 'default' as FlowerType,
+      options: {
+        'Nosuch Petals': 'default',
+        'Violet Iris': 'iris',
+        'Dandelion': 'dandelion',
+        'Daisy': 'daisy'
+      }
+    },
     petalCount: { value: 24, min: 8, max: 48, step: 1 },
     radius: { value: 2.5, min: 1, max: 5, step: 0.1 },
     autoRotate: { value: true },
@@ -31,14 +42,21 @@ export function FlowerScene() {
     chromaticAberrationOffset: { value: 0.002, min: 0, max: 0.01, step: 0.001 }
   })
 
+  // Get flower configuration and update control values accordingly
+  const flowerConfig = FLOWER_TYPES[flowerType as FlowerType]
+  
   useFrame(({ clock }) => {
     if (autoRotate && groupRef.current) {
       groupRef.current.rotation.y = clock.getElapsedTime() * rotationSpeed * 0.1
     }
   })
 
-  const petals = Array.from({ length: petalCount }, (_, i) => ({
-    angle: (i * Math.PI * 2) / petalCount,
+  // Use flower-specific defaults but allow override
+  const actualPetalCount = petalCount || flowerConfig.petalCount
+  const actualRadius = radius || flowerConfig.radius
+
+  const petals = Array.from({ length: actualPetalCount }, (_, i) => ({
+    angle: (i * Math.PI * 2) / actualPetalCount,
     index: i
   }))
 
@@ -65,8 +83,9 @@ export function FlowerScene() {
             key={petal.index}
             angle={petal.angle}
             index={petal.index}
-            radius={radius}
-            petalCount={petalCount}
+            radius={actualRadius}
+            petalCount={actualPetalCount}
+            flowerType={flowerType as FlowerType}
           />
         ))}
       </group>
@@ -75,7 +94,7 @@ export function FlowerScene() {
       <mesh position={[0, 0, 0]} castShadow>
         <sphereGeometry args={[0.3, 32, 32]} />
         <meshPhysicalMaterial
-          color="#ffdd00"
+          color={flowerConfig.centerColor}
           roughness={0.2}
           metalness={0.8}
           clearcoat={1}

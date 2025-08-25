@@ -2,16 +2,19 @@ import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Mesh } from 'three'
 import { PetalMaterial } from './PetalMaterial'
+import { FLOWER_TYPES, FlowerType } from '../types/flowers'
 
 interface PetalProps {
   angle: number
   index: number
   radius?: number
   petalCount?: number
+  flowerType?: FlowerType
 }
 
-export function Petal({ angle, index, radius = 2.5, petalCount = 20 }: PetalProps) {
+export function Petal({ angle, index, radius = 2.5, petalCount = 20, flowerType = 'default' }: PetalProps) {
   const meshRef = useRef<Mesh>(null!)
+  const flowerConfig = FLOWER_TYPES[flowerType]
   
   useFrame(({ clock }) => {
     if (!meshRef.current) return
@@ -40,6 +43,20 @@ export function Petal({ angle, index, radius = 2.5, petalCount = 20 }: PetalProp
     meshRef.current.position.set(x, y, z)
   })
 
+  // Generate geometry based on flower type
+  const renderGeometry = () => {
+    switch (flowerConfig.petalShape) {
+      case 'wide': // Iris - wider petals
+        return <cylinderGeometry args={[0, flowerConfig.petalWidth, flowerConfig.petalLength, 12, 4]} />
+      case 'thin': // Dandelion - very thin petals
+        return <cylinderGeometry args={[0, flowerConfig.petalWidth, flowerConfig.petalLength, 8, 2]} />
+      case 'ellipse': // Daisy - elongated oval
+        return <cylinderGeometry args={[0, flowerConfig.petalWidth, flowerConfig.petalLength, 16, 6]} />
+      default: // Default cone shape
+        return <cylinderGeometry args={[0, flowerConfig.petalWidth, flowerConfig.petalLength, 16, 4]} />
+    }
+  }
+
   return (
     <mesh
       ref={meshRef}
@@ -47,10 +64,8 @@ export function Petal({ angle, index, radius = 2.5, petalCount = 20 }: PetalProp
       castShadow
       receiveShadow
     >
-      <cylinderGeometry 
-        args={[0, 0.5, 2, 16, 4]} 
-      />
-      <PetalMaterial index={index} />
+      {renderGeometry()}
+      <PetalMaterial index={index} flowerType={flowerType} />
     </mesh>
   )
 }
