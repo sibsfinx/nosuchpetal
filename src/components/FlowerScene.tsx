@@ -1,14 +1,20 @@
-import { Suspense } from 'react'
+import { Suspense, useRef } from 'react'
 import { Environment, OrbitControls } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette, ChromaticAberration } from '@react-three/postprocessing'
 import { BlendFunction } from 'postprocessing'
 import { Petal } from './Petal'
 import { useControls } from 'leva'
+import { useFrame } from '@react-three/fiber'
+import { Group } from 'three'
 
 export function FlowerScene() {
+  const groupRef = useRef<Group>(null!)
+  
   const {
     petalCount,
     radius,
+    autoRotate,
+    rotationSpeed,
     bloomIntensity,
     bloomRadius,
     vignetteIntensity,
@@ -16,10 +22,18 @@ export function FlowerScene() {
   } = useControls({
     petalCount: { value: 24, min: 8, max: 48, step: 1 },
     radius: { value: 2.5, min: 1, max: 5, step: 0.1 },
+    autoRotate: { value: true },
+    rotationSpeed: { value: 0.5, min: 0, max: 2, step: 0.1 },
     bloomIntensity: { value: 1.2, min: 0, max: 3, step: 0.1 },
     bloomRadius: { value: 0.4, min: 0, max: 1, step: 0.1 },
     vignetteIntensity: { value: 0.5, min: 0, max: 1, step: 0.1 },
     chromaticAberrationOffset: { value: 0.002, min: 0, max: 0.01, step: 0.001 }
+  })
+
+  useFrame(({ clock }) => {
+    if (autoRotate && groupRef.current) {
+      groupRef.current.rotation.y = clock.getElapsedTime() * rotationSpeed * 0.1
+    }
   })
 
   const petals = Array.from({ length: petalCount }, (_, i) => ({
@@ -44,7 +58,7 @@ export function FlowerScene() {
       />
 
       {/* Flower petals */}
-      <group>
+      <group ref={groupRef}>
         {petals.map((petal) => (
           <Petal
             key={petal.index}
@@ -96,7 +110,9 @@ export function FlowerScene() {
           blendFunction={BlendFunction.NORMAL}
         />
         <ChromaticAberration
-          offset={[chromaticAberrationOffset, chromaticAberrationOffset]}
+          offset={[chromaticAberrationOffset, chromaticAberrationOffset] as any}
+          radialModulation={false}
+          modulationOffset={0}
           blendFunction={BlendFunction.NORMAL}
         />
       </EffectComposer>
