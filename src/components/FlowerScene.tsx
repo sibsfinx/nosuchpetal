@@ -3,7 +3,7 @@ import { Environment, OrbitControls } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette, ChromaticAberration } from '@react-three/postprocessing'
 import { BlendFunction } from 'postprocessing'
 import { Petal } from './Petal'
-import { SaveImageHandler } from './SaveImageHandler'
+import { ReactiveGlow } from './ReactiveGlow'
 import { useControls } from 'leva'
 import { useFrame } from '@react-three/fiber'
 import { Group } from 'three'
@@ -18,6 +18,8 @@ export function FlowerScene() {
     radius,
     autoRotate,
     rotationSpeed,
+    audioSmoothness,
+    reactiveGlow,
     bloomIntensity,
     bloomRadius,
     vignetteIntensity,
@@ -36,6 +38,8 @@ export function FlowerScene() {
     radius: { value: 2.5, min: 1, max: 5, step: 0.1 },
     autoRotate: { value: true },
     rotationSpeed: { value: 0.5, min: 0, max: 2, step: 0.1 },
+    audioSmoothness: { value: 2.5, min: 0, max: 10, step: 0.1, label: 'Audio Reactivity' },
+    reactiveGlow: { value: false, label: 'Reactive Glow' },
     bloomIntensity: { value: 1.2, min: 0, max: 3, step: 0.1 },
     bloomRadius: { value: 0.4, min: 0, max: 1, step: 0.1 },
     vignetteIntensity: { value: 0.5, min: 0, max: 1, step: 0.1 },
@@ -86,9 +90,13 @@ export function FlowerScene() {
             radius={actualRadius}
             petalCount={actualPetalCount}
             flowerType={flowerType as FlowerType}
+            audioSmoothness={audioSmoothness}
           />
         ))}
       </group>
+
+      {/* Reactive Glow around center */}
+      {reactiveGlow && <ReactiveGlow />}
 
       {/* Center sphere */}
       <mesh position={[0, 0, 0]} castShadow>
@@ -117,9 +125,6 @@ export function FlowerScene() {
         enableDamping={true}
         dampingFactor={0.05}
       />
-
-      {/* Save Image Handler */}
-      <SaveImageHandler />
 
       {/* Post-processing effects */}
       <EffectComposer>

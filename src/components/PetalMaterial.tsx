@@ -30,7 +30,7 @@ const vertexShader = `
   }
 `
 
-// Fragment shader for glossy material
+// Fragment shader for glossy material with highlight
 const fragmentShader = `
   uniform float time;
   uniform vec3 color;
@@ -38,6 +38,7 @@ const fragmentShader = `
   uniform float metalness;
   uniform float roughness;
   uniform float transmission;
+  uniform float highlightIntensity;
   
   varying vec2 vUv;
   varying vec3 vNormal;
@@ -58,7 +59,11 @@ const fragmentShader = `
     float edge = 1.0 - abs(uv.y - 0.5) * 2.0;
     edge = pow(edge, 3.0);
     
-    vec3 finalColor = baseColor * gradient + edge * 0.3;
+    // Audio highlight effect
+    vec3 highlightColor = vec3(1.0, 0.8, 0.2); // Golden highlight
+    baseColor = mix(baseColor, highlightColor, highlightIntensity * 0.6);
+    
+    vec3 finalColor = baseColor * gradient + edge * (0.3 + highlightIntensity * 0.5);
     float alpha = opacity * gradient;
     
     gl_FragColor = vec4(finalColor, alpha);
@@ -77,7 +82,8 @@ class PetalShaderMaterial extends ShaderMaterial {
         warpIntensity: { value: 0.1 },
         metalness: { value: 0.8 },
         roughness: { value: 0.1 },
-        transmission: { value: 0.8 }
+        transmission: { value: 0.8 },
+        highlightIntensity: { value: 0 }
       },
       transparent: true,
       depthWrite: false
@@ -99,9 +105,10 @@ declare global {
 interface PetalMaterialProps {
   index: number
   flowerType?: FlowerType
+  highlightIntensity?: number
 }
 
-export function PetalMaterial({ index, flowerType = 'default' }: PetalMaterialProps) {
+export function PetalMaterial({ index, flowerType = 'default', highlightIntensity = 0 }: PetalMaterialProps) {
   const materialRef = useRef<PetalShaderMaterial>(null!)
   const flowerConfig = FLOWER_TYPES[flowerType]
   
@@ -122,6 +129,7 @@ export function PetalMaterial({ index, flowerType = 'default' }: PetalMaterialPr
     if (materialRef.current) {
       materialRef.current.uniforms.time.value = clock.getElapsedTime()
       materialRef.current.uniforms.color.value = colorVariations
+      materialRef.current.uniforms.highlightIntensity.value = highlightIntensity
     }
   })
 

@@ -1,6 +1,7 @@
 import { Canvas } from '@react-three/fiber'
 import { FlowerScene } from './components/FlowerScene'
 import { UI } from './components/UI'
+import { AudioProvider } from './contexts/AudioContext'
 import './styles/global.css'
 
 export default function App() {
@@ -10,7 +11,7 @@ export default function App() {
   const cameraFov = isMobile ? 65 : 45
 
   return (
-    <>
+    <AudioProvider>
       <Canvas
         camera={{ position: cameraPosition, fov: cameraFov }}
         gl={{ 
@@ -25,6 +26,6 @@ export default function App() {
         <FlowerScene />
       </Canvas>
       <UI />
-    </>
+    </AudioProvider>
   )
 }

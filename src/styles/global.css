@@ -44,54 +44,154 @@ body {
   color: #ff3366;
 }
 
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.header-section h3 {
+  margin: 0;
+}
+
+.help-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  height: 24px;
+  width: 24px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.help-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #ff3366;
+}
+
+.help-content {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .info-panel p {
   margin: 8px 0;
   line-height: 1.4;
   opacity: 0.8;
 }
 
-.save-button {
-  background: linear-gradient(135deg, #ff3366, #ff6699);
+/* Audio Controls */
+.audio-controls {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.audio-controls h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #66ccff;
+}
+
+.audio-error {
+  background: rgba(255, 51, 51, 0.2);
+  border: 1px solid rgba(255, 51, 51, 0.4);
+  border-radius: 6px;
+  color: #ff6666;
+  font-size: 12px;
+  margin-bottom: 12px;
+  padding: 8px;
+}
+
+.audio-device-select {
+  margin-bottom: 12px;
+}
+
+.audio-device-select label {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 4px;
+  opacity: 0.8;
+}
+
+.audio-device-select select {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: white;
+  font-size: 12px;
+  padding: 6px 8px;
+  width: 100%;
+}
+
+.audio-device-select select:focus {
+  border-color: #66ccff;
+  outline: none;
+}
+
+.audio-device-select select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.audio-toggle {
+  background: linear-gradient(135deg, #6600cc, #9933ff);
   border: none;
   border-radius: 8px;
   color: white;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  margin-top: 12px;
-  padding: 10px 16px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
   transition: all 0.2s ease;
   width: 100%;
 }
 
-.save-button:hover {
-  background: linear-gradient(135deg, #ff6699, #ff99cc);
+.audio-toggle:hover {
+  background: linear-gradient(135deg, #7722dd, #aa44ff);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 51, 102, 0.3);
+  box-shadow: 0 4px 12px rgba(102, 204, 255, 0.3);
 }
 
-.save-button:active {
-  transform: translateY(0);
+.audio-toggle.active {
+  background: linear-gradient(135deg, #00cc66, #33ff99);
 }
 
-/* Mobile optimizations */
-@media (max-width: 768px) {
-  .ui-overlay {
-    top: 10px;
-    left: 10px;
-    right: 10px;
-  }
-  
-  .info-panel {
-    max-width: none;
-    padding: 12px;
-    font-size: 13px;
-  }
-  
-  .save-button {
-    font-size: 13px;
-    padding: 8px 12px;
-  }
+.audio-toggle.active:hover {
+  background: linear-gradient(135deg, #00aa55, #22dd88);
+}
+
+.audio-info {
+  background: rgba(0, 204, 102, 0.1);
+  border: 1px solid rgba(0, 204, 102, 0.3);
+  border-radius: 6px;
+  font-size: 11px;
+  padding: 8px;
+}
+
+.audio-info p {
+  margin: 4px 0;
+  opacity: 0.9;
 }
 
 .save-button {
@@ -137,6 +237,12 @@ body {
     margin-bottom: 8px;
   }
   
+  .help-toggle {
+    height: 20px;
+    width: 20px;
+    font-size: 14px;
+  }
+  
   .info-panel p {
     margin: 6px 0;
   }
@@ -145,6 +251,25 @@ body {
     font-size: 12px;
     padding: 8px 12px;
     margin-top: 8px;
+  }
+  
+  .audio-controls h4 {
+    font-size: 13px;
+  }
+  
+  .audio-toggle {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  
+  .audio-device-select select {
+    font-size: 11px;
+    padding: 5px 6px;
+  }
+  
+  .audio-info {
+    font-size: 10px;
+    padding: 6px;
   }
 }
 
