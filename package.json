@@ -2,7 +2,6 @@
   "name": "nosuchpetals",
   "version": "1.0.0",
   "description": "Generative flower art with React Three Fiber",
-  "homepage": "https://sibsfinx.github.io/nosuchpetals",
   "main": "index.js",
   "scripts": {
     "dev": "vite",

@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig(({ command }) => ({
   plugins: [react()],
-  base: '/nosuchpetals/',
+  base: '/', // Use root path for Netlify
   server: {
     port: 3000,
     open: true
