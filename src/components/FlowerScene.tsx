@@ -1,16 +1,59 @@
-import { Suspense, useRef } from 'react'
+import { Suspense, useRef, useEffect } from 'react'
 import { Environment, OrbitControls } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette, ChromaticAberration } from '@react-three/postprocessing'
 import { BlendFunction } from 'postprocessing'
 import { Petal } from './Petal'
 import { ReactiveGlow } from './ReactiveGlow'
-import { useControls } from 'leva'
+import { useControls, folder } from 'leva'
 import { useFrame } from '@react-three/fiber'
 import { Group } from 'three'
 import { FLOWER_TYPES, FlowerType } from '../types/flowers'
 
 export function FlowerScene() {
   const groupRef = useRef<Group>(null!)
+  
+  // Handle Leva visibility toggle and width adjustment
+  useEffect(() => {
+    const handleToggleLeva = (event: CustomEvent) => {
+      const levaRoot = document.querySelector('.leva-c_canvas')?.parentElement
+      if (levaRoot) {
+        if (event.detail.hidden) {
+          levaRoot.classList.add('leva-hidden')
+        } else {
+          levaRoot.classList.remove('leva-hidden')
+        }
+      }
+    }
+
+    // Force Leva panel width to be 30% wider
+    const adjustLevaWidth = () => {
+      const levaElements = [
+        document.querySelector('[data-leva-root]'),
+        document.querySelector('.leva-c_canvas'),
+        document.querySelector('.leva-c_panel'),
+        ...Array.from(document.querySelectorAll('[class*="leva"]'))
+      ].filter(Boolean)
+
+      levaElements.forEach(element => {
+        if (element instanceof HTMLElement) {
+          element.style.width = '416px'
+          element.style.maxWidth = '416px'
+          element.style.minWidth = '416px'
+        }
+      })
+    }
+
+    // Adjust width on mount and periodically
+    const interval = setInterval(adjustLevaWidth, 100)
+    adjustLevaWidth()
+
+    window.addEventListener('toggleLeva', handleToggleLeva as EventListener)
+    
+    return () => {
+      clearInterval(interval)
+      window.removeEventListener('toggleLeva', handleToggleLeva as EventListener)
+    }
+  }, [])
   
   const {
     flowerType,
@@ -24,26 +67,89 @@ export function FlowerScene() {
     bloomRadius,
     vignetteIntensity,
     chromaticAberrationOffset
-  } = useControls({
-    flowerType: {
-      value: 'default' as FlowerType,
-      options: {
-        'Nosuch Petals': 'default',
-        'Violet Iris': 'iris',
-        'Dandelion': 'dandelion',
-        'Daisy': 'daisy'
+  } = useControls('🌸 Nosuch Petals', {
+    '🌺 Flower Shape & Style': folder({
+      flowerType: {
+        value: 'default' as FlowerType,
+        options: {
+          'Nosuch Petals (Default)': 'default',
+          'Violet Iris': 'iris',
+          'Dandelion': 'dandelion',
+          'Daisy': 'daisy'
+        },
+        label: 'Flower Type'
+      },
+      petalCount: { 
+        value: 24, 
+        min: 8, 
+        max: 48, 
+        step: 1, 
+        label: 'Number of Petals' 
+      },
+      radius: { 
+        value: 2.5, 
+        min: 1, 
+        max: 5, 
+        step: 0.1, 
+        label: 'Flower Size (Radius)' 
       }
-    },
-    petalCount: { value: 24, min: 8, max: 48, step: 1 },
-    radius: { value: 2.5, min: 1, max: 5, step: 0.1 },
-    autoRotate: { value: true },
-    rotationSpeed: { value: 0.5, min: 0, max: 2, step: 0.1 },
-    audioSmoothness: { value: 2.5, min: 0, max: 10, step: 0.1, label: 'Audio Reactivity' },
-    reactiveGlow: { value: false, label: 'Reactive Glow' },
-    bloomIntensity: { value: 1.2, min: 0, max: 3, step: 0.1 },
-    bloomRadius: { value: 0.4, min: 0, max: 1, step: 0.1 },
-    vignetteIntensity: { value: 0.5, min: 0, max: 1, step: 0.1 },
-    chromaticAberrationOffset: { value: 0.002, min: 0, max: 0.01, step: 0.001 }
+    }),
+    '🔄 Animation & Movement': folder({
+      autoRotate: { 
+        value: true, 
+        label: 'Enable Auto Rotation' 
+      },
+      rotationSpeed: { 
+        value: 0.5, 
+        min: 0, 
+        max: 2, 
+        step: 0.1, 
+        label: 'Rotation Speed' 
+      }
+    }),
+    '🎵 Audio Reactivity': folder({
+      audioSmoothness: { 
+        value: 2.5, 
+        min: 0, 
+        max: 10, 
+        step: 0.1, 
+        label: 'Audio Response Intensity' 
+      },
+      reactiveGlow: { 
+        value: false, 
+        label: 'Music Reactive Glow Effect' 
+      }
+    }),
+    '✨ Visual Effects': folder({
+      bloomIntensity: { 
+        value: 1.2, 
+        min: 0, 
+        max: 3, 
+        step: 0.1, 
+        label: 'Bloom Glow Intensity' 
+      },
+      bloomRadius: { 
+        value: 0.4, 
+        min: 0, 
+        max: 1, 
+        step: 0.1, 
+        label: 'Bloom Glow Radius' 
+      },
+      vignetteIntensity: { 
+        value: 0.5, 
+        min: 0, 
+        max: 1, 
+        step: 0.1, 
+        label: 'Edge Vignette Effect' 
+      },
+      chromaticAberrationOffset: { 
+        value: 0.002, 
+        min: 0, 
+        max: 0.01, 
+        step: 0.001, 
+        label: 'Color Separation Effect' 
+      }
+    })
   })
 
   // Get flower configuration and update control values accordingly

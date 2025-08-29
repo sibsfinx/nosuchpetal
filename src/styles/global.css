@@ -55,7 +55,13 @@ body {
   margin: 0;
 }
 
-.help-toggle {
+.header-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.help-toggle, .minimize-toggle {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
@@ -72,9 +78,29 @@ body {
   line-height: 1;
 }
 
-.help-toggle:hover {
+.minimize-toggle {
+  font-size: 12px;
+  background: rgba(255, 102, 102, 0.1);
+  border-color: rgba(255, 102, 102, 0.3);
+}
+
+.help-toggle:hover, .minimize-toggle:hover {
   background: rgba(255, 255, 255, 0.2);
   border-color: #ff3366;
+}
+
+.minimize-toggle:hover {
+  background: rgba(255, 102, 102, 0.2);
+  border-color: #ff6666;
+}
+
+.info-panel.minimized {
+  padding: 8px 12px;
+}
+
+.info-panel.minimized h3 {
+  font-size: 14px;
+  margin: 0;
 }
 
 .help-content {
@@ -281,4 +307,333 @@ body {
     left: 20px;
     right: 20px;
   }
+}
+
+/* Leva Control Panel Improvements */
+[class*="leva-"] {
+  font-family: inherit !important;
+}
+
+/* Main Leva container - target the actual panel */
+.leva-c_canvas,
+[class*="leva-c_canvas"],
+[class*="leva-c_panel"] {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  max-width: 416px !important; /* 320px * 1.3 = 416px (30% wider) */
+  min-width: 416px !important; /* Force minimum width */
+  width: 416px !important; /* Set explicit width */
+  z-index: 1000 !important;
+}
+
+/* Also target the root Leva element */
+[data-leva-root] {
+  max-width: 416px !important;
+  min-width: 416px !important;
+  width: 416px !important;
+}
+
+/* Force width on all Leva containers */
+.leva__root,
+.leva-root,
+#leva__root,
+[id*="leva"],
+[class*="leva"] > div:first-child {
+  max-width: 416px !important;
+  min-width: 416px !important;
+  width: 416px !important;
+}
+
+/* Leva root panel */
+.leva-c_panel {
+  background: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/* Leva title */
+.leva-c_title {
+  color: #ff3366 !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  padding: 12px 16px 8px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Folder styling */
+.leva-c_folder {
+  border: none !important;
+  margin: 0 !important;
+}
+
+.leva-c_folderTitle {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #66ccff !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  padding: 10px 16px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.leva-c_folderTitle:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #88ddff !important;
+}
+
+.leva-c_folderContent {
+  padding: 0 !important;
+}
+
+/* Control row improvements - force vertical stacking */
+.leva-c_row {
+  padding: 8px 16px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  min-height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  align-items: stretch !important;
+}
+
+/* Force the inner container to stack vertically */
+.leva-c_row > div {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  width: 100% !important;
+}
+
+/* Specifically target the wrapper that contains label and control */
+.leva-c_row [class*="leva-c_"] {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+}
+
+/* Override Leva's default grid layout */
+.leva-c_row > div > div {
+  display: flex !important;
+  flex-direction: column !important;
+  grid-template-columns: none !important;
+  grid-gap: 4px !important;
+  gap: 4px !important;
+}
+
+/* Additional overrides to force vertical layout */
+[class*="leva-c_row"] [style*="grid"] {
+  display: flex !important;
+  flex-direction: column !important;
+  grid-template-columns: none !important;
+}
+
+/* Override any inline grid styles */
+[class*="leva-c_row"] > div[style] {
+  display: flex !important;
+  flex-direction: column !important;
+  grid-template-columns: none !important;
+  align-items: stretch !important;
+}
+
+/* Make sure labels span full width */
+[class*="leva-c_label"] {
+  width: 100% !important;
+  grid-column: 1 / -1 !important;
+  display: block !important;
+}
+
+/* Make sure controls span full width */
+[class*="leva-c_control"],
+[class*="leva-c_number"],
+[class*="leva-c_range"],
+[class*="leva-c_select"],
+[class*="leva-c_boolean"] {
+  width: 100% !important;
+  grid-column: 1 / -1 !important;
+}
+
+/* Control label styling - always on top */
+.leva-c_label {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
+  white-space: normal !important;
+  max-width: 100% !important;
+  flex: none !important;
+  margin-bottom: 4px !important;
+  order: 1 !important;
+  grid-column: 1 / -1 !important;
+  justify-self: stretch !important;
+}
+
+/* Control input container - always below label */
+.leva-c_control {
+  flex: 1 !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  order: 2 !important;
+  grid-column: 1 / -1 !important;
+}
+
+/* Ensure all input types maintain stacked layout */
+.leva-c_numberContainer,
+.leva-c_rangeContainer,
+.leva-c_selectContainer,
+.leva-c_booleanContainer {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+}
+
+/* Number input styling */
+.leva-c_number input {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 6px !important;
+  color: white !important;
+  font-size: 13px !important;
+  padding: 6px 8px !important;
+  width: 100% !important;
+}
+
+.leva-c_number input:focus {
+  border-color: #66ccff !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(102, 204, 255, 0.2) !important;
+}
+
+/* Range slider styling */
+.leva-c_range {
+  width: 100% !important;
+}
+
+.leva-c_rangeSlider {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 4px !important;
+  height: 6px !important;
+}
+
+.leva-c_rangeSlider > div {
+  background: linear-gradient(135deg, #66ccff, #9933ff) !important;
+  border-radius: 4px !important;
+}
+
+.leva-c_rangeSlider::before {
+  background: #66ccff !important;
+  border: 2px solid white !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Select dropdown styling */
+.leva-c_select select {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 6px !important;
+  color: white !important;
+  font-size: 13px !important;
+  padding: 6px 8px !important;
+  width: 100% !important;
+}
+
+.leva-c_select select:focus {
+  border-color: #66ccff !important;
+  outline: none !important;
+}
+
+/* Boolean toggle styling - maintain vertical layout */
+.leva-c_boolean {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  width: 100% !important;
+}
+
+.leva-c_boolean > input[type="checkbox"] {
+  margin: 4px 0 0 0 !important;
+  accent-color: #66ccff !important;
+  transform: scale(1.2) !important;
+}
+
+/* Special handling for boolean labels */
+.leva-c_boolean .leva-c_label {
+  margin-bottom: 6px !important;
+  order: 1 !important;
+}
+
+.leva-c_boolean input {
+  order: 2 !important;
+}
+
+/* Responsive design for narrow panels */
+@media (max-width: 768px) {
+  .leva-c_canvas {
+    top: 10px !important;
+    right: 10px !important;
+    max-width: 364px !important; /* 280px * 1.3 = 364px (30% wider) */
+  }
+  
+  .leva-c_title {
+    font-size: 14px !important;
+    padding: 10px 12px 6px !important;
+  }
+  
+  .leva-c_folderTitle {
+    font-size: 13px !important;
+    padding: 8px 12px !important;
+  }
+  
+  .leva-c_row {
+    padding: 6px 12px !important;
+  }
+  
+  .leva-c_label {
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .leva-c_canvas {
+    position: fixed !important;
+    top: auto !important;
+    bottom: 80px !important;
+    left: 10px !important;
+    right: 10px !important;
+    max-width: none !important;
+  }
+  
+  .leva-c_row {
+    gap: 4px !important;
+  }
+  
+  .leva-c_label {
+    margin-bottom: 2px !important;
+  }
+}
+
+/* Hide Leva when minimized via custom event */
+.leva-hidden .leva-c_canvas {
+  display: none !important;
+}
+
+/* Override any inline styles that Leva might be setting */
+[style*="width"] {
+  width: 416px !important;
+}
+
+/* More specific targeting for the Leva container */
+body > div[style],
+body > div > div[style] {
+  max-width: 416px !important;
+  width: 416px !important;
 }
